@@ -1,0 +1,24 @@
+# Control node
+
+SERVICE_HOST=192.168.56.50
+DATABASE_PASSWORD=password
+RABBIT_PASSWORD=password
+SERVICE_PASSWORD=password
+ADMIN_PASSWORD=password
+SERVICE_TOKEN=xyzpdqlazydog
+FIXED_RANGE=10.4.128.0/20
+FLOATING_RANGE=192.168.56.128/25
+FLAT_INTERFACE=eth1
+LOGFILE=/home/stack/stack.sh.log
+Q_FLOATING_ALLOCATION_POOL=start=192.168.56.100,end=192.168.56.125
+PUBLIC_NETWORK_GATEWAY=192.168.56.1
+API_RATE_LIMIT=False
+
+disable_service n-net
+enable_service q-svc
+enable_service q-agt
+enable_service q-dhcp
+enable_service q-l3
+enable_service q-meta
+enable_service neutron
+enable_service tempest

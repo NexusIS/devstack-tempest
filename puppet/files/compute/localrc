@@ -1,0 +1,30 @@
+# Compute node
+
+HOST_IP=192.168.56.51
+FLAT_INTERFACE=eth1
+FIXED_RANGE=10.4.128.0/20
+FIXED_NETWORK_SIZE=4096
+FLOATING_RANGE=192.168.56.128/25
+MULTI_HOST=1
+LOGFILE=/opt/stack/logs/stack.sh.log
+ADMIN_PASSWORD=password
+RABBIT_PASSWORD=password
+SERVICE_PASSWORD=password
+SERVICE_TOKEN=xyzpdqlazydog
+SERVICE_HOST=192.168.56.50
+MYSQL_HOST=192.168.56.50
+RABBIT_HOST=192.168.56.50
+GLANCE_HOSTPORT=192.168.56.50:9292
+Q_FLOATING_ALLOCATION_POOL=start=192.168.56.100,end=192.168.56.125
+
+ENABLED_SERVICES=n-cpu,n-api,c-sch,c-api,c-vol
+
+disable_service n-net
+enable_service q-svc
+enable_service q-agt
+enable_service q-dhcp
+enable_service q-l3
+enable_service q-meta
+enable_service neutron
+disable_service horizon
+disable_service tempest

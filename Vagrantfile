@@ -2,34 +2,66 @@
 
 Vagrant.configure("2") do |config|
 
-  config.vm.define "devstack" do |devstack|
+  # CONTROLLER CONFIG
+  config.vm.define "controller" do |controller|
+    ip_address             = "192.168.56.50"
+    controller.vm.box      = "precise64"
+    controller.vm.hostname = "controller"
 
-    devstack.vm.box      = "precise64"
-    devstack.vm.hostname = "devstack"
+    controller.vm.network "private_network", ip: ip_address
 
-    # Used by vagrant and the provisioner further down.
-    ip_address = "192.168.56.11"
+    controller.vm.provider "virtualbox" do |vb|
+      vb.customize ["modifyvm", :id, "--memory", 4000]
 
-    devstack.vm.network "private_network", ip: ip_address
-
-    # Forward the following local ports to the VM
-    config.vm.network "forwarded_port", guest: 35357, host: 35357
-    config.vm.network "forwarded_port", guest: 8776,  host: 8776
-    config.vm.network "forwarded_port", guest: 9292,  host: 9292
-    config.vm.network "forwarded_port", guest: 8774,  host: 8774
-    config.vm.network "forwarded_port", guest: 8773,  host: 8773
-    config.vm.network "forwarded_port", guest: 5000,  host: 5000
-    config.vm.network "forwarded_port", guest: 11181, host: 11181
-    config.vm.network "forwarded_port", guest: 80,    host: 8088
-
-
-    devstack.vm.provider "virtualbox" do |vm|
-      vm.customize ["modifyvm", :id, "--memory", 4000]
+      # This allows symlinks to be created within the /vagrant root directory,
+      # which is something librarian-puppet needs to be able to do. This might
+      # be enabled by default depending on what version of VirtualBox is used.
+      vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
     end
 
-    devstack.vm.provision "shell", path: 'vagrant/shell/provision.sh', 
-                          args: ip_address
+    # Forward the following local ports to the controller
+    controller.vm.network "forwarded_port", guest: 35357, host: 35357
+    controller.vm.network "forwarded_port", guest: 8776,  host: 8776
+    controller.vm.network "forwarded_port", guest: 9292,  host: 9292
+    controller.vm.network "forwarded_port", guest: 8774,  host: 8774
+    controller.vm.network "forwarded_port", guest: 8773,  host: 8773
+    controller.vm.network "forwarded_port", guest: 5000,  host: 5000
+    controller.vm.network "forwarded_port", guest: 11181, host: 11181
+    controller.vm.network "forwarded_port", guest: 80,    host: 8088
 
-  end # config.vm.define :devstack
+    # This shell provisioner installs librarian-puppet and runs it to install
+    # puppet modules. This has to be done before the puppet provisioning so that
+    # the modules are available when puppet tries to parse its manifests.
+    controller.vm.provision :shell, :path => "shell/main.sh"
+
+    controller.vm.provision "puppet" do |puppet|
+      puppet.manifests_path = "puppet/manifests"
+      puppet.manifest_file  = "site.pp"
+    end
+  end
+
+
+  # COMPUTE CONFIG
+  config.vm.define "compute" do |compute|
+    ip_address          = "192.168.56.51"
+    compute.vm.box      = "precise64"
+    compute.vm.hostname = "compute"
+
+    compute.vm.network "private_network", ip: ip_address
+
+    compute.vm.provider "virtualbox" do |vb|
+      vb.customize ["modifyvm", :id, "--memory", 2048]
+    end
+
+    # This shell provisioner installs librarian-puppet and runs it to install
+    # puppet modules. This has to be done before the puppet provisioning so that
+    # the modules are available when puppet tries to parse its manifests.
+    compute.vm.provision :shell, :path => "shell/main.sh"
+
+    compute.vm.provision "puppet" do |puppet|
+      puppet.manifests_path = "puppet/manifests"
+      puppet.manifest_file  = "site.pp"
+    end
+  end
 
 end
