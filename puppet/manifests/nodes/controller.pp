@@ -1,4 +1,24 @@
+include python
+
 node controller inherits basenode {
+	
+	# ez_setup.py from the python module appears to be installing 
+	# easy_install in a different directory when in Ubuntu and that
+	# confuses the pymod resource type below. This ensures that, it
+	# will find easy_install where it expects it.
+	exec { "symlink_easy_install":
+		command => "/bin/ln -s /usr/bin/easy_install /usr/local/bin/easy_install",
+	}
+
+	
+	# Make sure the eventlet package is installed in the VM (global) and not on the
+	# NFS mounted shared dir (virtualenv) to avoid this bug: 
+	# https://bitbucket.org/eventlet/eventlet/issue/81/stdlib-queue-not-found-from-within
+	pymod { "eventlet":
+		name    => "eventlet",
+		require => Exec["symlink_easy_install"],
+	}
+
 
 	file { '/home/stack/devstack/localrc':
 	  ensure 	=> file,

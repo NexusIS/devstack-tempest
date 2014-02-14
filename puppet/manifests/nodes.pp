@@ -22,7 +22,11 @@ class users {
 
 class base_packages {
 	package { "git":
-		ensure 	=> installed,
+		ensure => installed 
+	}
+	
+  package { "python-setuptools": 
+		ensure => installed 
 	}
 }
 

@@ -2,3 +2,6 @@ forge "http://forge.puppetlabs.com"
 
 mod "puppetlabs/stdlib"
 mod "puppetlabs/vcsrepo"
+
+mod "python",
+	:git => "git://github.com/garthk/python-module-for-puppet.git"
