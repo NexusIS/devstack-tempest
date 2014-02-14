@@ -9,7 +9,7 @@ your local machine. Tempest is also configured in the controller node.
 1. VirtualBox. Install from https://www.virtualbox.org/wiki/Downloads
 1. OS X. May work on other *NIX platform but I've not tested it yet.
 1. Vagrant. Install from http://www.vagrantup.com/downloads.html. Try 
-	 to read through the command line interface documentation at least.
+   to read through the command line interface documentation at least.
 1. The vagrant-vbguest plugin. Install with `vagrant plugin install vagrant-vbguest`
 1. Bundler. Install with `gem install bundler`
 
