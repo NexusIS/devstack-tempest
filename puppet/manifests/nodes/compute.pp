@@ -1,8 +1,4 @@
-import 'base_node.pp'
-
-node compute {
-	include base_node
-
+node compute inherits basenode {
 
 	file { '/home/stack/devstack/localrc':
 	  ensure 	=> file,
@@ -48,4 +44,5 @@ node compute {
     path    => '/home/stack/devstack/localrc',
 		require => [ Exec["start_devstack"] ],
   }
+
 }

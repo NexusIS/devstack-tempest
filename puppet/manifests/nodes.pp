@@ -27,10 +27,7 @@ class base_packages {
 }
 
 
-class base_node {
-	include users
-	include base_packages
-
+class devstack_repo {
 	vcsrepo { "/home/stack/devstack":
     ensure   => latest,
     owner    => 'stack',
@@ -41,3 +38,12 @@ class base_node {
     revision => 'origin/stable/havana',
 	}
 }
+
+
+node basenode {
+	include users
+	include base_packages
+	include devstack_repo
+}
+
+import 'nodes/*.pp'

@@ -1,8 +1,4 @@
-import 'base_node.pp'
-
-node controller {
-	include base_node
-
+node controller inherits basenode {
 
 	file { '/home/stack/devstack/localrc':
 	  ensure 	=> file,
@@ -79,4 +75,5 @@ node controller {
 								 Exec["start_devstack"] 
 							 ],
 	}
+
 }
