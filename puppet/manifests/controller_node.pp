@@ -71,11 +71,12 @@ node controller {
 	}
 	
 	
-	file { '/vagrant/tempest/etc/tempest.conf':
-	  ensure 	  => file,
-	  content   => file('/opt/stack/tempest/etc/tempest.conf'),
-		require   => [ Vcsrepo["/vagrant/tempest"] ],
-		subscribe => [ Exec["start_devstack"] ]
+	exec { "copy_tempest_conf":
+		command => '/bin/cp /opt/stack/tempest/etc/tempest.conf etc/tempest.conf',
+		cwd		  => '/vagrant/tempest',
+		require	=> [ 
+								 Vcsrepo["/vagrant/tempest"],
+								 Exec["start_devstack"] 
+							 ],
 	}
-
 }
