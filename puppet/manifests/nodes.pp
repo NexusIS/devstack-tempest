@@ -29,6 +29,15 @@ class base_packages {
   package { "python-setuptools":
     ensure => installed,
   }
+  
+  
+  # This ensures the python module doesn't get confused
+  # when running in Ubuntu
+  exec { "symlink_easy_install":
+    command => "/bin/ln -s /usr/bin/easy_install /usr/local/bin/easy_install",
+    require => Exec["easy_install installer"],
+    creates => "/usr/local/bin/easy_install",
+  }
 }
 
 

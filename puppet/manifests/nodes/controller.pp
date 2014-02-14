@@ -7,6 +7,7 @@ node controller inherits basenode {
   # https://bitbucket.org/eventlet/eventlet/issue/81/stdlib-queue-not-found-from-within
   pymod { "eventlet":
     name    => "eventlet",
+    require => Exec["symlink_easy_install"]
   }
 
 
