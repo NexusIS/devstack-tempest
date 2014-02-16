@@ -10,7 +10,7 @@ node compute inherits basenode {
 
 
   notify { 'running_devstack':
-    message => "Now running stack.sh. This can take up to an hour depending on your connection speed. If you need to monitor its progress, please open another terminal, cd to this directory, run `vagrant ssh compute` then `tail -f /home/stack/stack.sh.log`",
+    message => "Now running stack.sh. This can take up to an hour depending on your connection speed. If you need to monitor its progress, please open another terminal, cd to this directory, run `vagrant ssh compute` then `tail -f /opt/stack/logs/stack.sh.log`",
     require => [
                  File["/home/stack/devstack/localrc"],
                ],

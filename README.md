@@ -36,15 +36,12 @@ lost. This will cause the provisioning process to fail. When this happens,
 just run `vagrant reload --provision` and all should be fine again.
 
 When the command above completes, Devstack will have been installed and running 
-in the nodes. Test it by browsing to `http://localhost:8088` in your local machine 
+in the nodes. Test it by browsing to `http://192.168.56.11` in your local machine 
 (username/password is admin/password). Check that the compute node registered 
 with the controller by going to Admin > Hypervisors (you should see two hosts). 
 Note that Horizon's response might be slow for the first few minutes after 
 provisioning (OpenStack is likely still busy initializing some stuff) but should 
 be satisfyingly fast soon after that.
-
-There are a bunch of other ports in your local machine that get forwarded to the 
-controller node. For an updated list, look inside the Vagrantfile file.
 
 Also by this time, tempest should already be cloned into `/vagrant/tempest` in 
 the controller node. SSH to the controller with `vagrant ssh controller`. Note 
@@ -100,6 +97,35 @@ it's as simple as executing `vagrant up --provision`.
     $ sudo su -
     $ cd /vagrant/tempest
     $ example: `./run_tests.sh -V -- run --parallel tempest.api.compute.servers.test_servers_negative.ServersNegativeTestJSON.test_reboot_non_existent_server`
+
+
+## Troubleshooting
+
+**I called `vagrant up` but provisioning failed**
+
+What likely happened is that there was an update to the Virtualbox Guest Additions 
+which the vagrant-vbguest plugin installed automatically. Because this requires a
+kernel update in the guest, the shared folders needed by puppet disappeared. To fix
+this, just run `vagrant reaload --provision`. Alternatively, you can specify a node
+by doing `vagrant reload controller --provision` or `vagrant reload compute --provision`
+
+
+**There are instances when I want to restart DevStack but not the node**
+
+You can use `vagrant provision controller` or `vagrant provision compute`.
+
+
+**I'd like to use localhost instead of 192.168.56.11 to connect**
+
+Not a problem! Check Vagrantfile for host ports that are currently being
+forwarded to the controller node.
+
+
+**I re-provisioned the controller and now Horizon is broken when I refresh my browser**
+
+This seems to have something to do with how Horizon handles cookies. Try opening an
+incognito window using Chrome (Shift-Command-N in OS X, Shift-Ctrl-N in Windows/Linux)
+and use that to browse to Horizon.
 
 
 ## Questions?

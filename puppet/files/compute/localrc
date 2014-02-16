@@ -1,30 +1,46 @@
 # Compute node
 
-HOST_IP=192.168.56.51
+HOST_IP=192.168.56.12
 FLAT_INTERFACE=eth1
 FIXED_RANGE=10.4.128.0/20
 FIXED_NETWORK_SIZE=4096
+
 FLOATING_RANGE=192.168.56.128/25
+Q_FLOATING_ALLOCATION_POOL=start=192.168.56.128,end=192.168.56.254
+Q_USE_SECGROUP=False
+
 MULTI_HOST=1
+
+SERVICE_HOST=192.168.56.11
+MYSQL_HOST=192.168.56.11
+RABBIT_HOST=192.168.56.11
+GLANCE_HOSTPORT=192.168.56.11:9292
+
 LOGFILE=/opt/stack/logs/stack.sh.log
-ADMIN_PASSWORD=password
+SCREEN_LOGDIR=$DEST/logs/screen
+VERBOSE=True
+LOG_COLOR=True
+
+CINDER_BRANCH=stable/havana
+GLANCE_BRANCH=stable/havana
+HORIZON_BRANCH=stable/havana
+KEYSTONE_BRANCH=stable/havana
+KEYSTONECLIENT_BRANCH=stable/havana
+NOVA_BRANCH=stable/havana
+NOVACLIENT_BRANCH=stable/havana
+NEUTRON_BRANCH=stable/havana
+SWIFT_BRANCH=stable/havana
+
+DATABASE_PASSWORD=password
 RABBIT_PASSWORD=password
 SERVICE_PASSWORD=password
+ADMIN_PASSWORD=password
 SERVICE_TOKEN=xyzpdqlazydog
-SERVICE_HOST=192.168.56.50
-MYSQL_HOST=192.168.56.50
-RABBIT_HOST=192.168.56.50
-GLANCE_HOSTPORT=192.168.56.50:9292
-Q_FLOATING_ALLOCATION_POOL=start=192.168.56.100,end=192.168.56.125
+
+API_RATE_LIMIT=False
 
 ENABLED_SERVICES=n-cpu,n-api,c-sch,c-api,c-vol
+ENABLED_SERVICES+=,neutron,q-svc,q-agt,q-dhcp,q-l3,q-meta
 
-disable_service n-net
-enable_service q-svc
-enable_service q-agt
-enable_service q-dhcp
-enable_service q-l3
-enable_service q-meta
-enable_service neutron
-disable_service horizon
-disable_service tempest
+# Disabled services
+ENABLED_SERVICES+=,-n-net,-tempest,-horizon

@@ -4,11 +4,10 @@ Vagrant.configure("2") do |config|
 
   # CONTROLLER CONFIG
   config.vm.define "controller" do |controller|
-    ip_address             = "192.168.56.50"
     controller.vm.box      = "precise64"
     controller.vm.hostname = "controller"
 
-    controller.vm.network "private_network", ip: ip_address
+    controller.vm.network "private_network", ip: "192.168.56.11"
 
     controller.vm.provider "virtualbox" do |vb|
       vb.customize ["modifyvm", :id, "--memory", 4000]
@@ -43,11 +42,10 @@ Vagrant.configure("2") do |config|
 
   # COMPUTE CONFIG
   config.vm.define "compute" do |compute|
-    ip_address          = "192.168.56.51"
     compute.vm.box      = "precise64"
     compute.vm.hostname = "compute"
 
-    compute.vm.network "private_network", ip: ip_address
+    compute.vm.network "private_network", ip: "192.168.56.12"
 
     compute.vm.provider "virtualbox" do |vb|
       vb.customize ["modifyvm", :id, "--memory", 2048]
