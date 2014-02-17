@@ -2,18 +2,18 @@
 
 HOST_IP=192.168.56.11
 FLAT_INTERFACE=eth1
+FLOATING_RANGE=192.168.56.128/25
 FIXED_RANGE=10.4.128.0/20
 FIXED_NETWORK_SIZE=4096
 PUBLIC_NETWORK_GATEWAY=192.168.56.1
 
-FLOATING_RANGE=192.168.56.128/25
 Q_FLOATING_ALLOCATION_POOL=start=192.168.56.128,end=192.168.56.254
 Q_USE_SECGROUP=False
 
 MULTI_HOST=1
 
 LOGFILE=/opt/stack/logs/stack.sh.log
-SCREEN_LOGDIR=$DEST/logs/screen
+SCREEN_LOGDIR=/opt/stack/logs/screen
 VERBOSE=True
 LOG_COLOR=True
 
@@ -35,17 +35,19 @@ SERVICE_TOKEN=xyzpdqlazydog
 
 API_RATE_LIMIT=False
 
-ENABLED_SERVICES=rabbit,mysql,key,tempest
-ENABLED_SERVICES+=,q-svc,q-agt,q-dhcp,q-l3,q-meta,neutron
-
+# Basic services
+ENABLED_SERVICES=rabbit,mysql,key,tempest,horizon
 ENABLED_SERVICES+=,n-api,n-crt,n-obj,n-cpu,n-cond,n-sch
-ENABLED_SERVICES+=,g-api,g-reg
-IMAGE_URLS+=",https://launchpad.net/cirros/trunk/0.3.0/+download/cirros-0.3.0-x86_64-disk.img"
 
 # Don't use Nova Network
 ENABLED_SERVICES+=,-n-net
 
-# Horizon
-ENABLED_SERVICES+=,horizon
-HORIZON_REPO=https://github.com/openstack/horizon
-HORIZON_BRANCH=master
+# Neutron services
+ENABLED_SERVICES+=,q-svc,q-agt,q-dhcp,q-l3,q-meta,neutron
+
+# Run a scheduler that will balance VMs across hosts
+SCHEDULER=nova.scheduler.simple.SimpleScheduler
+
+# Glance services
+ENABLED_SERVICES+=,g-api,g-reg
+IMAGE_URLS+=",https://launchpad.net/cirros/trunk/0.3.0/+download/cirros-0.3.0-x86_64-disk.img"

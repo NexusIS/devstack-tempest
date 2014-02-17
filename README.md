@@ -36,7 +36,7 @@ lost. This will cause the provisioning process to fail. When this happens,
 just run `vagrant reload --provision` and all should be fine again.
 
 When the command above completes, Devstack will have been installed and running 
-in the nodes. Test it by browsing to `http://192.168.56.11` in your local machine 
+in the nodes. Test it by browsing to `http://192.168.56.11` in your local machine
 (username/password is admin/password). Check that the compute node registered 
 with the controller by going to Admin > Hypervisors (you should see two hosts). 
 Note that Horizon's response might be slow for the first few minutes after 
@@ -103,7 +103,7 @@ it's as simple as executing `vagrant up --provision`.
 
 **I called `vagrant up` but provisioning failed**
 
-What likely happened is that there was an update to the Virtualbox Guest Additions 
+What likely happened is that there was an update to the Virtualbox Guest Additions
 which the vagrant-vbguest plugin installed automatically. Because this requires a
 kernel update in the guest, the shared folders needed by puppet disappeared. To fix
 this, just run `vagrant reaload --provision`. Alternatively, you can specify a node
