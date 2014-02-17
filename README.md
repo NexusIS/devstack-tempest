@@ -27,14 +27,6 @@ will download all relevant OpenStack packages on first run.
 1. `bundle install` and wait for all Ruby gems to install
 1. `vagrant up` and wait until the nodes are fully provisioned
 
-CAVEAT: There is a quirk that has no permanent solution at this point. This 
-will come up when the VirtualBox Guest Additions version in the guest does 
-not match the one in the host. Thanks to the Vagrant's vbguest plugin, this 
-discrepancy is automatically resolved. The downside is that, because this 
-requires a kernel change in the guest, shared directories are subsequently 
-lost. This will cause the provisioning process to fail. When this happens, 
-just run `vagrant reload --provision` and all should be fine again.
-
 When the command above completes, Devstack will have been installed and running 
 in the nodes. Test it by browsing to `http://192.168.56.11` in your local machine
 (username/password is admin/password). Check that the compute node registered 
@@ -100,15 +92,6 @@ it's as simple as executing `vagrant up --provision`.
 
 
 ## Troubleshooting
-
-**I called `vagrant up` but provisioning failed**
-
-What likely happened is that there was an update to the Virtualbox Guest Additions
-which the vagrant-vbguest plugin installed automatically. Because this requires a
-kernel update in the guest, the shared folders needed by puppet disappeared. To fix
-this, just run `vagrant reaload --provision`. Alternatively, you can specify a node
-by doing `vagrant reload controller --provision` or `vagrant reload compute --provision`
-
 
 **There are instances when I want to restart DevStack but not the node**
 

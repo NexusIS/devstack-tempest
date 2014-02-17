@@ -37,6 +37,11 @@ Vagrant.configure("2") do |config|
       puppet.manifests_path = "puppet/manifests"
       puppet.manifest_file  = "site.pp"
     end
+    
+    # When vagrant-vbguest updates the VirtualBox Guest
+    # Addition kernel modules, shared folders subsequently
+    # are lost and Puppet fails. Auto-rebooting fixes that.
+    controller.vbguest.auto_reboot = true
   end
 
 
@@ -60,6 +65,11 @@ Vagrant.configure("2") do |config|
       puppet.manifests_path = "puppet/manifests"
       puppet.manifest_file  = "site.pp"
     end
+
+    # When vagrant-vbguest updates the VirtualBox Guest
+    # Addition kernel modules, shared folders subsequently
+    # are lost and Puppet fails. Auto-rebooting fixes that.
+    compute.vbguest.auto_reboot = true
   end
 
 end
