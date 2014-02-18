@@ -8,7 +8,7 @@ your local machine. Tempest is also configured in the controller node.
 1. At least 8GB of RAM. The DevStack environment will use ~6GB combined.
 1. VirtualBox. Install from https://www.virtualbox.org/wiki/Downloads
 1. OS X. May work on other *NIX platform but I've not tested it yet.
-1. Vagrant. Install from http://www.vagrantup.com/downloads.html. Try 
+1. Vagrant v1.4.3. Install from http://www.vagrantup.com/downloads.html. Try 
    to read through the command line interface documentation at least.
 1. The vagrant-vbguest plugin. Install with `vagrant plugin install vagrant-vbguest`
 1. Bundler. Install with `gem install bundler`

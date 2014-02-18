@@ -38,12 +38,16 @@ class base_packages {
     require => Exec["easy_install installer"],
     creates => "/usr/local/bin/easy_install",
   }
+  
+  package { "python-dev":
+    ensure => installed,
+  }
 }
 
 
 class devstack_repo {
   vcsrepo { "/home/stack/devstack":
-    ensure   => latest,
+    ensure   => present,
     owner    => 'stack',
     group    => 'stack',
     provider => git,
@@ -57,10 +61,71 @@ class devstack_repo {
 }
 
 
+class ovs_2 {
+  package { "build-essential": 
+    ensure => installed,
+  }
+
+  package { "fakeroot": 
+    ensure => installed,
+  }
+  
+  exec { "download_openvswitch_2":
+    command => "/usr/bin/wget http://openvswitch.org/releases/openvswitch-2.0.0.tar.gz",
+    cwd     => "/root",
+    creates => "/root/openvswitch-2.0.0.tar.gz",
+  }
+  
+  exec { "extract_openvswitch_2":
+    command => "/bin/tar xvfz openvswitch-2.0.0.tar.gz",
+    cwd     => "/root",
+    creates => "/root/openvswitch-2.0.0/README",
+  }
+
+  $ovs_dependencies = [ 'debhelper', 'autoconf', 'automake1.10', 'python-all', 
+                        'python-qt4', 'python-zopeinterface', 'python-twisted-conch' ]
+  
+  package { $ovs_dependencies: 
+    ensure => installed 
+  }
+  
+  exec { "build_ovs_2":
+    command     => "/usr/bin/fakeroot debian/rules binary",
+    environment => "DEB_BUILD_OPTIONS='parallel=8 nocheck'",
+    cwd         => "/root/openvswitch-2.0.0",
+    logoutput   => true,
+    loglevel    => verbose,
+    timeout     => 0,
+    require     => [
+                     Package["build-essential"],
+                     Package["fakeroot"],
+                     Package[$ovs_dependencies],
+                     Exec["extract_openvswitch_2"]
+                   ],
+  }
+  
+  package { "ovs_common":
+    name     =>  'openvswitch-common',
+    ensure   =>  installed,
+    provider =>  dpkg,
+    source   =>  "/root/openvswitch-common_2.0.0-1_amd64.deb",
+    require  => [ Exec["build_ovs_2"] ],
+  }
+
+  package { "ovs_switch":
+    name     =>  'openvswitch-switch',
+    ensure   =>  installed,
+    provider =>  dpkg,
+    source   =>  "/root/openvswitch-switch_2.0.0-1_amd64.deb",
+    require  => [ Package["ovs_common"] ],
+  }
+}
+
 node basenode {
   include users
   include base_packages
   include devstack_repo
+  include ovs_2
 }
 
 import 'nodes/*.pp'

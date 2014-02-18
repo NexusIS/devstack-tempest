@@ -7,7 +7,10 @@ node controller inherits basenode {
   # https://bitbucket.org/eventlet/eventlet/issue/81/stdlib-queue-not-found-from-within
   pymod { "eventlet":
     name    => "eventlet",
-    require => Exec["symlink_easy_install"]
+    require => [ 
+                 Exec["symlink_easy_install"], 
+                 Package["python-dev"]
+               ]
   }
 
 
@@ -53,7 +56,10 @@ node controller inherits basenode {
     cwd       => '/home/stack/devstack',
     logoutput => on_failure,
     timeout   => 0,
-    require   => [ Exec["stop_devstack"] ],
+    require   => [ 
+                   Exec["stop_devstack"],
+                   Package["ovs_switch"] 
+                 ],
   }
 
 
