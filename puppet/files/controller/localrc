@@ -53,7 +53,7 @@ ENABLED_SERVICES+=,-n-net
 ENABLED_SERVICES+=,q-svc,q-agt,q-dhcp,q-l3,q-meta,neutron
 
 # Run a scheduler that will balance VMs across hosts
-SCHEDULER=nova.scheduler.simple.SimpleScheduler
+SCHEDULER=nova.scheduler.filter_scheduler.FilterScheduler
 
 # Glance services
 ENABLED_SERVICES+=,g-api,g-reg
