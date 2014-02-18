@@ -47,7 +47,10 @@ class devstack_repo {
     owner    => 'stack',
     group    => 'stack',
     provider => git,
-    require  => [ Package["git"] ],
+    require  => [ 
+                  Package["git"], 
+                  User["stack"] 
+                ],
     source   => "https://github.com/openstack-dev/devstack.git",
     revision => 'origin/stable/havana',
   }
