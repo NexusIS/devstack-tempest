@@ -3,10 +3,12 @@
 require './vagrant-provision-reboot-plugin'
 
 Vagrant.configure("2") do |config|
+  
+  config.vm.box     = "precise64"
+  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
 
   # CONTROLLER CONFIG
   config.vm.define "controller" do |controller|
-    controller.vm.box      = "precise64"
     controller.vm.hostname = "controller"
 
     controller.vm.network "private_network", ip: "192.168.56.11"
@@ -59,7 +61,6 @@ Vagrant.configure("2") do |config|
 
   # COMPUTE CONFIG
   config.vm.define "compute" do |compute|
-    compute.vm.box      = "precise64"
     compute.vm.hostname = "compute"
 
     compute.vm.network "private_network", ip: "192.168.56.12"
