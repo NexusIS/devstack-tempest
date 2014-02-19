@@ -10,8 +10,7 @@ FIXED_NETWORK_SIZE=4096
 PUBLIC_NETWORK_GATEWAY=192.168.56.1
 
 Q_USE_SECGROUP=True
-Q_USE_NAMESPACE=False
-Q_PLUGIN=ml2
+Q_PLUGIN=ml2                  # Should we use openvswitch plugin instead???
 ENABLE_TENANT_TUNNELS=True
 Q_ML2_TENANT_NETWORK_TYPE=vxlan
 Q_ALLOW_OVERLAPPING_IP=True
@@ -41,19 +40,20 @@ SERVICE_TOKEN=xyzpdqlazydog
 
 API_RATE_LIMIT=False
 
-# Basic services
+# Controller Node services
 ENABLED_SERVICES=rabbit,mysql,key,tempest,horizon
 ENABLED_SERVICES+=,n-api,n-crt,n-obj,n-cpu,n-cond,n-sch
+ENABLED_SERVICES+=,g-api,g-reg
+IMAGE_URLS+=",https://launchpad.net/cirros/trunk/0.3.0/+download/cirros-0.3.0-x86_64-disk.img"
+
+# Neutron agent
+ENABLED_SERVICES+=,neutron,q-agt
+
+# Network Node services
+ENABLED_SERVICES+=,q-svc,q-dhcp,q-l3,q-meta
 
 # Don't use Nova Network
 ENABLED_SERVICES+=,-n-net
 
-# Neutron services
-ENABLED_SERVICES+=,q-svc,q-agt,q-dhcp,q-l3,q-meta,neutron
-
 # Run a scheduler that will balance VMs across hosts
 SCHEDULER=nova.scheduler.filter_scheduler.FilterScheduler
-
-# Glance services
-ENABLED_SERVICES+=,g-api,g-reg
-IMAGE_URLS+=",https://launchpad.net/cirros/trunk/0.3.0/+download/cirros-0.3.0-x86_64-disk.img"

@@ -119,6 +119,9 @@ class ovs_2 {
     source   =>  "/root/openvswitch-switch_2.0.0-1_amd64.deb",
     require  => [ Package["ovs_common"] ],
   }
+
+  # Need to update dnsmasq to 2.6 as per
+  # http://openstack.redhat.com/forum/discussion/comment/1910#Comment_1910
 }
 
 node basenode {
