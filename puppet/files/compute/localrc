@@ -41,11 +41,8 @@ SERVICE_TOKEN=xyzpdqlazydog
 
 API_RATE_LIMIT=False
 
-# Basic services
-ENABLED_SERVICES=n-cpu,n-api,c-sch,c-api,c-vol
-
-# Neutron services
-ENABLED_SERVICES+=,q-svc,q-agt,q-dhcp,q-l3,q-meta,neutron
+# Compute node services
+ENABLED_SERVICES=rabbit,n-cpu,neutron,q-agt
 
 # Disabled services
 ENABLED_SERVICES+=,-n-net,-horizon,-tempest
