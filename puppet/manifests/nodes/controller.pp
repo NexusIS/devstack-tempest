@@ -63,6 +63,13 @@ node controller inherits basenode {
   }
 
 
+  # As per https://github.com/mseknibilel/OpenStack-Folsom-Install-guide/issues/14#issuecomment-10277135
+  exec { "fix_dhcp_bug":
+    command => "/sbin/iptables -A POSTROUTING -t mangle -p udp --dport 68 -j CHECKSUM --checksum-fill",
+    require => [ Exec["start_devstack"] ],
+  }
+
+
   # Make stack.sh run in offline mode next time
   file_line { 'offline_stack_sh':
     ensure  => present,
