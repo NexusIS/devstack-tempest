@@ -11,11 +11,6 @@ your local machine. Tempest is also configured in the controller node.
 1. Vagrant v1.4.3. Install from http://www.vagrantup.com/downloads.html. Try 
    to read through the command line interface documentation at least.
 1. The vagrant-vbguest plugin. Install with `vagrant plugin install vagrant-vbguest`
-1. Bundler. Install with `gem install bundler`
-
-## Optional but Recommended
-
-1. RVM. Install with `curl -sSL https://get.rvm.io | bash -s stable --ruby`
 
 ## Installation
 
@@ -24,7 +19,6 @@ Estimated time for the following steps including automated provisioning:
 will download all relevant OpenStack packages on first run.
 
 1. Clone this repo and cd to it
-1. `bundle install` and wait for all Ruby gems to install
 1. `vagrant up` and wait until the nodes are fully provisioned
 
 When the command above completes, Devstack will have been installed and running 
