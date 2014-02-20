@@ -47,7 +47,7 @@ class base_packages {
 
 class devstack_repo {
   vcsrepo { "/home/stack/devstack":
-    ensure   => present,
+    ensure   => latest,
     owner    => 'stack',
     group    => 'stack',
     provider => git,

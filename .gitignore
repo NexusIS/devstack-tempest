@@ -1,3 +1,4 @@
 tempest/
 .vagrant
 .DS_Store
+*.box

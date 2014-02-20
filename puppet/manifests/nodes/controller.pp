@@ -13,10 +13,13 @@ node controller inherits basenode {
                ]
   }
 
-
   file { '/home/stack/devstack/localrc':
+    ensure => absent,
+  }
+
+  file { '/home/stack/devstack/local.conf':
     ensure  => file,
-    content => file('/vagrant/puppet/files/controller/localrc'),
+    content => file('/vagrant/puppet/files/controller/local.conf'),
     group   => 'stack',
     owner   => 'stack',
     require => Vcsrepo["/home/stack/devstack"],
@@ -35,6 +38,7 @@ node controller inherits basenode {
     message => "Now running stack.sh. This can take up to an hour depending on your connection speed. If you need to monitor its progress, please open another terminal, cd to this directory, run `vagrant ssh controller` then `tail -f /opt/stack/logs/stack.sh.log`",
     require => [
                  File["/home/stack/devstack/localrc"],
+                 File["/home/stack/devstack/local.conf"],
                  File["/home/stack/devstack/local.sh"]
                ],
   }
@@ -74,7 +78,7 @@ node controller inherits basenode {
   file_line { 'offline_stack_sh':
     ensure  => present,
     line    => file('/vagrant/puppet/files/common/offline.txt'),
-    path    => '/home/stack/devstack/localrc',
+    path    => '/home/stack/devstack/local.conf',
     require => [ Exec["start_devstack"] ],
   }
 

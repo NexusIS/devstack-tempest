@@ -3,7 +3,7 @@
 Vagrant.configure("2") do |config|
   
   config.vm.box     = "devstackbase-0.0.1"
-  # config.vm.box_url = "http://please/modify/me/soon"
+  config.vm.box_url = "https://dl.dropboxusercontent.com/u/1355795/devstackbase-0.0.1.box"
 
 
   # CONTROLLER CONFIG
@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
     controller.vm.hostname = "controller"
 
     # eth1
-    controller.vm.network "private_network", ip: "192.168.0.10"
+    controller.vm.network "private_network", ip: "192.168.42.11"
     
     # When vagrant-vbguest updates the VirtualBox Guest
     # Addition kernel modules, shared folders subsequently
@@ -38,28 +38,28 @@ Vagrant.configure("2") do |config|
 
 
   # COMPUTE CONFIG
-  config.vm.define "compute" do |compute|
-    compute.vm.hostname = "compute"
-
-    # eth1
-    compute.vm.network "private_network", ip: "192.168.0.11"
-
-    compute.vm.provider "virtualbox" do |vb|
-      vb.customize ["modifyvm", :id, "--memory", 2048]
-    end
-
-    # When vagrant-vbguest updates the VirtualBox Guest
-    # Addition kernel modules, shared folders subsequently
-    # are lost and Puppet fails. Auto-rebooting fixes that.
-    compute.vbguest.auto_reboot = true
-
-    controller.vm.provision :shell, :path => "shell/check_kernel_version.sh"
-    controller.vm.provision :shell, :path => "shell/install_puppet_modules.sh"
-
-    compute.vm.provision "puppet" do |puppet|
-      puppet.manifests_path = "puppet/manifests"
-      puppet.manifest_file  = "site.pp"
-    end
-  end
+  # config.vm.define "compute" do |compute|
+  #   compute.vm.hostname = "compute"
+  # 
+  #   # eth1
+  #   compute.vm.network "private_network", ip: "192.168.0.11"
+  # 
+  #   compute.vm.provider "virtualbox" do |vb|
+  #     vb.customize ["modifyvm", :id, "--memory", 2048]
+  #   end
+  # 
+  #   # When vagrant-vbguest updates the VirtualBox Guest
+  #   # Addition kernel modules, shared folders subsequently
+  #   # are lost and Puppet fails. Auto-rebooting fixes that.
+  #   compute.vbguest.auto_reboot = true
+  # 
+  #   compute.vm.provision :shell, :path => "shell/check_kernel_version.sh"
+  #   compute.vm.provision :shell, :path => "shell/install_puppet_modules.sh"
+  # 
+  #   compute.vm.provision "puppet" do |puppet|
+  #     puppet.manifests_path = "puppet/manifests"
+  #     puppet.manifest_file  = "site.pp"
+  #   end
+  # end
 
 end
