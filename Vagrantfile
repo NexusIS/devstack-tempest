@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "controller" do |controller|
     controller.vm.hostname = "controller"
 
-    # eth1
+    # eth1 (IMPORTANT: This network should not have DCHP)
     controller.vm.network "private_network", ip: "192.168.42.11"
     
     # When vagrant-vbguest updates the VirtualBox Guest
