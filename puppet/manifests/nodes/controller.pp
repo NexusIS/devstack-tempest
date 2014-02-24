@@ -62,7 +62,8 @@ node controller inherits basenode {
     timeout   => 0,
     require   => [ 
                    Exec["stop_devstack"],
-                   Package["ovs_switch"] 
+                   Package["ovs_switch"],
+                   Firewall["100 ip masq"]
                  ],
   }
 

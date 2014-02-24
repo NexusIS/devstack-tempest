@@ -29,8 +29,8 @@ class base_packages {
   package { "python-setuptools":
     ensure => installed,
   }
-  
-  
+
+
   # This ensures the python module doesn't get confused
   # when running in Ubuntu
   exec { "symlink_easy_install":
@@ -38,7 +38,7 @@ class base_packages {
     require => Exec["easy_install installer"],
     creates => "/usr/local/bin/easy_install",
   }
-  
+
   package { "python-dev":
     ensure => installed,
   }
@@ -51,9 +51,9 @@ class devstack_repo {
     owner    => 'stack',
     group    => 'stack',
     provider => git,
-    require  => [ 
-                  Package["git"], 
-                  User["stack"] 
+    require  => [
+                  Package["git"],
+                  User["stack"]
                 ],
     source   => "https://github.com/openstack-dev/devstack.git",
     revision => 'origin/stable/havana',
@@ -62,33 +62,33 @@ class devstack_repo {
 
 
 class ovs_2 {
-  package { "build-essential": 
+  package { "build-essential":
     ensure => installed,
   }
 
-  package { "fakeroot": 
+  package { "fakeroot":
     ensure => installed,
   }
-  
+
   exec { "download_openvswitch_2":
     command => "/usr/bin/wget http://openvswitch.org/releases/openvswitch-2.0.0.tar.gz",
     cwd     => "/root",
     creates => "/root/openvswitch-2.0.0.tar.gz",
   }
-  
+
   exec { "extract_openvswitch_2":
     command => "/bin/tar xvfz openvswitch-2.0.0.tar.gz",
     cwd     => "/root",
     creates => "/root/openvswitch-2.0.0/README",
   }
 
-  $ovs_dependencies = [ 'debhelper', 'autoconf', 'automake1.10', 'python-all', 
+  $ovs_dependencies = [ 'debhelper', 'autoconf', 'automake1.10', 'python-all',
                         'python-qt4', 'python-zopeinterface', 'python-twisted-conch' ]
-  
-  package { $ovs_dependencies: 
-    ensure => installed 
+
+  package { $ovs_dependencies:
+    ensure => installed
   }
-  
+
   exec { "build_ovs_2":
     command     => "/usr/bin/fakeroot debian/rules binary",
     environment => "DEB_BUILD_OPTIONS='parallel=8 nocheck'",
@@ -103,7 +103,7 @@ class ovs_2 {
                      Exec["extract_openvswitch_2"]
                    ],
   }
-  
+
   package { "ovs_common":
     name     =>  'openvswitch-common',
     ensure   =>  installed,
@@ -120,15 +120,55 @@ class ovs_2 {
     require  => [ Package["ovs_common"] ],
   }
 
-  # Need to update dnsmasq to 2.6 as per
-  # http://openstack.redhat.com/forum/discussion/comment/1910#Comment_1910
 }
+
+
+# echo 1 > /proc/sys/net/ipv4/ip_forward
+# echo 1 > /proc/sys/net/ipv4/conf/eth0/proxy_arp
+# iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+# echo "net.ipv4.conf.eth0.proxy_arp = 1
+# net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+class ip_masq {
+  include firewall
+
+  exec { "ip_forward":
+    command => "/bin/echo '1' > /proc/sys/net/ipv4/ip_forward",
+  }
+
+
+  exec { "proxy_arp":
+    command => "/bin/echo '1' > /proc/sys/net/ipv4/conf/eth0/proxy_arp",
+  }
+
+
+  file_line { 'permanent_forwarding':
+    ensure  => present,
+    line    => file('/vagrant/puppet/files/common/sysctl.conf'),
+    path    => '/etc/sysctl.conf',
+    require => [ Exec["start_devstack"] ],
+  }
+  
+  
+  firewall { '100 ip masq':
+    chain    => 'POSTROUTING',
+    jump     => 'MASQUERADE',
+    outiface => "eth0",
+    table    => 'nat',
+    require  => [
+                  Exec["ip_forward"],
+                  Exec["proxy_arp"]
+                ],
+  }
+
+}
+
 
 node basenode {
   include users
   include base_packages
   include devstack_repo
   include ovs_2
+  include ip_masq
 }
 
 import 'nodes/*.pp'

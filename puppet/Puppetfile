@@ -2,6 +2,7 @@ forge "http://forge.puppetlabs.com"
 
 mod "puppetlabs/stdlib"
 mod "puppetlabs/vcsrepo"
+mod "puppetlabs/firewall"
 
 mod "python",
   :git => "git://github.com/relaxdiego/python-module-for-puppet.git"
