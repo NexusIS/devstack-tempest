@@ -82,7 +82,7 @@ class ovs_2 {
     creates => "/root/openvswitch-2.0.0/README",
   }
 
-  $ovs_dependencies = [ 'debhelper', 'autoconf', 'automake1.10', 'python-all',
+  $ovs_dependencies = [ 'debhelper', 'autoconf', 'automake1.10', 'python-all', 'libffi-dev',
                         'python-qt4', 'python-zopeinterface', 'python-twisted-conch' ]
 
   package { $ovs_dependencies:
