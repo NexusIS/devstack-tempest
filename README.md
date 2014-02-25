@@ -1,6 +1,6 @@
 # Vagrant + DevStack + Tempest
 
-This project automagically sets up a multi-node DevStack instance in 
+This project automagically sets up a DevStack environment in 
 your local machine. Tempest is also configured in the controller node.
 
 ## Requirements
@@ -104,8 +104,11 @@ This seems to have something to do with how Horizon handles cookies. Try opening
 incognito window using Chrome (Shift-Command-N in OS X, Shift-Ctrl-N in Windows/Linux)
 and use that to browse to Horizon.
 
+**I get an error "No module named subunit" when I run the tests**
+
+You probably switched branches and ended up with an incompatible set of python libraries.
+Go inside the tempest directory and delte the .venv/, .testrepository/, and .tox/ directories.
 
 ## Questions?
 
-Don't hesitate to email me at mark.maglana@nexusis.com if you have questions or 
-run into a roadblock.
+File it here: https://github.com/NexusIS/devstack-tempest/issues
