@@ -19,15 +19,15 @@ Estimated time for the following steps including automated provisioning:
 will download all relevant OpenStack packages on first run.
 
 1. Clone this repo and cd to it
-1. `vagrant up` and wait until the nodes are fully provisioned
+1. `vagrant up controller --provision` and wait until it is provisioned
+1. `vagrant up compute --provision` and wait until it is provisioned
 
 When the command above completes, Devstack will have been installed and running 
-in the nodes. Test it by browsing to `http://192.168.56.11` in your local machine
+in the nodes. Test it by browsing to `http://192.168.42.11` in your local machine
 (username/password is admin/password). Check that the compute node registered 
-with the controller by going to Admin > Hypervisors (you should see two hosts). 
-Note that Horizon's response might be slow for the first few minutes after 
-provisioning (OpenStack is likely still busy initializing some stuff) but should 
-be satisfyingly fast soon after that.
+with the controller by going to Admin > Hypervisors (you should see only one host). 
+Note that Horizon's response might be slow during your first access but should 
+be satisfyingly fast after that.
 
 Also by this time, tempest should already be cloned into `/vagrant/tempest` in 
 the controller node. SSH to the controller with `vagrant ssh controller`. Note 
@@ -68,7 +68,9 @@ tests ran succesfully.
 
 To suspend your VM, run `vagrant suspend`. To shut it down, run `vagrant halt`. 
 Note that if you shut it down, you will need to rerun DevStack again. Luckily 
-it's as simple as executing `vagrant up --provision`.
+it's as simple as executing `vagrant up <controller or compute> --provision`.
+Provisioning should be relatively fast this time around since DevStack is automatically
+configured to run in offline mode after the first provision.
 
 ## Running all tests
 
@@ -94,8 +96,8 @@ You can use `vagrant provision controller` or `vagrant provision compute`.
 
 **I'd like to use localhost instead of 192.168.56.11 to connect**
 
-Not a problem! Check Vagrantfile for host ports that are currently being
-forwarded to the controller node.
+Not a problem! Check the Vagran documentation at vagrantup.com for instructions
+on setting up port forwarding.
 
 
 **I re-provisioned the controller and now Horizon is broken when I refresh my browser**
@@ -104,10 +106,23 @@ This seems to have something to do with how Horizon handles cookies. Try opening
 incognito window using Chrome (Shift-Command-N in OS X, Shift-Ctrl-N in Windows/Linux)
 and use that to browse to Horizon.
 
+
 **I get an error "No module named subunit" when I run the tests**
 
 You probably switched branches and ended up with an incompatible set of python libraries.
 Go inside the tempest directory and delte the .venv/, .testrepository/, and .tox/ directories.
+If that doesn't work, you probably modified the controller's RAM size to something
+smaller than gcc needs to compile some native binaries. Raise it back to
+4GB temporarily.
+
+
+**I'm getting an 'ImportError: cannot import name Full' error when I run tests**
+
+You're likely using OS X with a non-case-sensitive filesystem. Go and open
+tempest/.venv/lib/python2.7/site-packages/eventlet/queue.py and add this line
+to the top of the file `from __future__ import absolute_import` then save
+and run the test(s) again.
+
 
 ## Questions?
 
