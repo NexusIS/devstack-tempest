@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
     controller.vbguest.auto_reboot = true
 
     controller.vm.provider "virtualbox" do |vb|
-      vb.customize ["modifyvm", :id, "--memory", 1024]
+      vb.customize ["modifyvm", :id, "--memory", 3072]
 
       # This allows symlinks to be created within the /vagrant root directory,
       # which is something librarian-puppet needs to be able to do. This might
@@ -45,7 +45,7 @@ Vagrant.configure("2") do |config|
     compute.vm.network "private_network", ip: "192.168.42.12"
 
     compute.vm.provider "virtualbox" do |vb|
-      vb.customize ["modifyvm", :id, "--memory", 4096]
+      vb.customize ["modifyvm", :id, "--memory", 2048]
     end
 
     # When vagrant-vbguest updates the VirtualBox Guest
