@@ -20,8 +20,8 @@ Estimated time for the following steps including automated provisioning:
 will download all relevant OpenStack packages on first run.
 
 1. Clone this repo and cd to it
-1. `vagrant up controller --provision` and wait until it is provisioned
-1. `vagrant up compute --provision` and wait until it is provisioned
+1. `vagrant up controller --provision`, type in your local password when asked, then wait until it is provisioned
+1. `vagrant up compute --provision`, type in your local password when asked, and wait until it is provisioned
 
 When the command above completes, Devstack will have been installed and running
 in the nodes. Test it by browsing to `http://192.168.42.11` in your local machine
