@@ -1,10 +1,13 @@
 #!/bin/env ruby
 
+require 'rbconfig'
+in_windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
+
 Vagrant.configure("2") do |config|
 
   config.vm.box     = "devstackbase-0.0.1"
   config.vm.box_url = "https://dl.dropboxusercontent.com/u/1355795/devstackbase-0.0.1.box"
-  config.vm.synced_folder ".", "/vagrant", :nfs => true
+  config.vm.synced_folder ".", "/vagrant", :nfs => true unless in_windows
 
 
   # CONTROLLER CONFIG
