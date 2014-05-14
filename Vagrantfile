@@ -4,6 +4,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.box     = "devstackbase-0.0.1"
   config.vm.box_url = "https://dl.dropboxusercontent.com/u/1355795/devstackbase-0.0.1.box"
+  config.vm.synced_folder ".", "/vagrant", :nfs => true
 
 
   # CONTROLLER CONFIG
