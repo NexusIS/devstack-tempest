@@ -140,6 +140,13 @@ You're missing developer tools needed to locally compile binaries needed
 by nokogiri. In OS X, install the OS X Developer Tools for your OS X version.
 
 
+## Sample Video
+
+Here's a video of the process of starting up the two nodes. Note that the video is slightly
+different in that it imports two local .box files for starting up the nodes. This was originally
+made for the workshop participants at the OpenStack 2014 summit where bandwidth for each
+individual would be limited. Watch the video [here](https://www.youtube.com/watch?v=vKHPX_6W5cM).
+
 ## Questions?
 
 File it here: https://github.com/NexusIS/devstack-tempest/issues
